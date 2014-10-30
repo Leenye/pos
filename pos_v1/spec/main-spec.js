@@ -20,12 +20,7 @@ describe('pos', function () {
     it('should print correct text', function () {
 
         spyOn(console, 'log');
-
-        getPurchasedItems(inputs);
-        
-        getCostsAndSavings();
-
-        printInventory();
+        printInventory(inputs);
 
         var expectText =
             '***<没钱赚商店>购物清单***\n' +

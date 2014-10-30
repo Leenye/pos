@@ -21,6 +21,10 @@ describe('pos', function () {
 
         spyOn(console, 'log');
 
+        getPurchasedItems(inputs);
+        
+        getCostsAndSavings();
+
         printInventory();
 
         var expectText =

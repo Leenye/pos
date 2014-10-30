@@ -1,6 +1,6 @@
 ﻿//TODO: Please write code in this file.
 
-// Pos V_1 To realize a printInventory functio
+// Pos V_1 To realize a printInventory function
  
     var allItems = loadAllItems();
     var purchasedItems = {
@@ -12,7 +12,7 @@
     {
       for(var iPI=0 ; iPI < inputs.length ; iPI++)  
         {
-          for(var iAI=0 ; iAI < allItems.length ; iAI++ )
+          for(var iAI=0 ; iAI < purchasedItems.barcode.length ; iAI++ )
             {  
                 if(inputs[iPI] == purchasedItems.barcode[iAI])
                   {
@@ -35,18 +35,18 @@
       barcode:['ITEM000000','ITEM000001','ITEM000005'],
       name:   ['可口可乐','雪碧','方便面'],
       unit:   ['瓶','瓶','袋'],
-      saveAmonunt:[0       ,0           ,0    ],
-      savingMoney:[0       ,0           ,0    ]
+      saveAmount:[0   ,0   ,0  ],
+      savingMoney:[0  ,0   ,0  ]
     }    // to store the promotion information
     function getCostsAndSavings()    //to get the information of promotions, and put them in the var savings
     {
-      for(var iAI=0 ; iAI < allItems.length ; iAI++)
+      for(var iAI=0 ; iAI < purchasedItems.barcode.length ; iAI++)
         {
-          for (var iprm =0 ; iprm < promotions.barcodes.length ;iprm ++)
+          for (var iprm =0 ; iprm < promotions[0].barcodes.length ;iprm ++)
             {
-              if(purchasedItems.barcode[iAI] == promotions.barcodes[iprm] && purchasedItems.amount[iAI] > 2) 
+              if(purchasedItems.barcode[iAI] == promotions[0].barcodes[iprm] && purchasedItems.amount[iAI] > 2) 
                 {var rem = purchasedItems.amount[iAI]%3;
-                 var quot = Math.round(purchasedItems.amount[iAI]/3 );
+                 var quot = Math.floor(purchasedItems.amount[iAI]/3);
                  purchasedItems.cost[iAI] = (2*quot + rem)*allItems[iAI].price;
                  savings.saveAmount[iAI] = quot;
                  savings.savingMoney[iAI] = quot*allItems[iAI].price;
@@ -56,8 +56,8 @@
                 {
                   purchasedItems.cost[iAI]=purchasedItems.amount[iAI]*allItems[iAI].price;                
                 }
-              allCost += purchasedItems.cost[iAI];
             }
+          allCost += purchasedItems.cost[iAI];
         }
     }
 
@@ -65,23 +65,23 @@
     {
       var text = "\n";
       text += "***<没钱赚商店>购物清单***\n";
-      for(var iAI=0 ; iAI < allItems.length ; iAI++)
+      for(var iAI=0 ; iAI < purchasedItems.barcode.length ; iAI++)
       {
-        if( purchasedItems.barcode[iAI] != 0)
+        if( purchasedItems.cost[iAI] != 0)
           {
             text += ("名称："+allItems[iAI].name+"，数量："+purchasedItems.amount[iAI]+allItems[iAI].unit+"，单价："+allItems[iAI].price +"(元)，小计："+purchasedItems.cost[iAI]+"(元)"+"\n"); 
           }
       } 
       text += "----------------------\n挥泪赠送商品：\n";
-      for (var iprm =0 ; iprm < promotions.barcodes.length ; iprm ++)
+      for (var iprm =0 ; iprm < (promotions[0].barcodes.length) ; iprm ++)
         {
           if(savings.saveAmount[iprm] != 0)
             {
-              text += ("名称："+savings.name[iprm]+"，数量："+savings.saveAmount[iprm]+savings.name[iprm]+"\n");
+              text += ("名称："+savings.name[iprm]+"，数量："+savings.saveAmount[iprm]+savings.unit[iprm]+"\n");
             }
         }
       text += '----------------------\n总计：'+allCost+'(元)\n节省：'+allSavings+'（元）\n**********************'
-      console.log(text+"\n\n");
+      console.log(text+"\n");
 
     }
 

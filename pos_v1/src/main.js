@@ -1,17 +1,11 @@
 ﻿// Pos V_1 To realize a printInventory function
-
-
 function printInventory(inputs) {
   var purchasedItems = getPurchasedItems(inputs);
   var list = getListItem(purchasedItems);
-//  var listItem = getListDetails (list);
-//  getListDetails (list);
-//  console.log(purchasedItems);
-  console.log(list);
+  var listWithPromotion = getPromotionItems(list);
+  console.log(listWithPromotion);
 
 }
-
-
 
 function isWeightedItem(input){
   return input.indexOf("-") != -1;
@@ -39,12 +33,13 @@ function getPurchasedItems(goods){
   return items;
 }
 
-function ListItem(barcode, amount, name, unit, price){
+function ListItem(barcode, amount, name, unit, price, promotionNum){
   this.barcode = barcode;
   this.amount = amount;
   this.name = name;
   this.unit = unit;
   this.price = price;
+  this.promotionNum = promotionNum;
 }
 
 function getListItem(items){
@@ -60,6 +55,19 @@ function getListItem(items){
         list[i].name = allItems[j].name;
         list[i].price = allItems[j].price;
         list[i].unit = allItems[j].unit;
+      }
+    }
+  }
+  return list;
+}
+
+function getPromotionItems(list){
+  var promotions = loadPromotions();
+  var promotionBarcodes = promotions[0].barcodes;
+  for (var i=0; i<promotionBarcodes.length; i++){
+    for(var j=0; j<list.length; j++ ){
+      if (list[j].barcode == promotionBarcodes[i]){
+        list[j].promotionNum = parseInt(list[j].amount / 3);
       }
     }
   }

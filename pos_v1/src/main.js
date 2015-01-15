@@ -6,11 +6,9 @@ function printInventory(inputs) {
   var costAndSavings = getCostAndSavings(listWithPromotion);
   var allCost = getAllCost(costAndSavings);
   var allSaving = getAllSaving(costAndSavings);
-  //console.log(costAndSavings);
-  console.log(allCost);
-  console.log(allSaving);
+  var receipt = getReceipt(costAndSavings, allCost, allSaving);
 
-
+  console.log(receipt);
 }
 
 function isWeightedItem(input){
@@ -101,24 +99,33 @@ function getCostAndSavings (list){
 }
 
 function getAllCost (list){
-  var allCost = 0;
+  var totalCost = 0;
   for(var i=0; i<list.length; i++ ){
-    allCost = allCost + list[i].cost;
+    totalCost = totalCost + list[i].cost;
   }
-  alert(allCost);
-  return allCost;
+  return totalCost;
 }
+
 function getAllSaving (list){
-  var allSaving = 0;
+  var totalSaving = 0;
   for(var i=0; i<list.length; i++ ){
-    allSaving = allSaving + list[i].saving;
+    totalSaving = totalSaving + list[i].saving;
   }
-  alert(allSaving);
-  return allSaving;
+  return totalSaving;
 }
 
-function getReceipt(list){
-  var receipt = "***<没钱赚商店>购物清单***";
-
+function getReceipt(list, totalCost, totalSaving){
+  var receipt = "";
+  var costReceipt = "";
+  var savingReceipt = "";
+  for(var i=0; i<list.length; i++ ){
+    costReceipt += "名称："+list[i].name+"，数量："+list[i].amount+list[i].unit+"，单价："+(list[i].price).toFixed(2)+"(元)，小计："+(list[i].cost).toFixed(2)+"(元)\n";
+    if(list[i].promotionNum >= 1){
+      savingReceipt += "名称："+list[i].name+"，数量："+list[i].promotionNum+list[i].unit+"\n";
+    }
+  }
+  receipt = '***<没钱赚商店>购物清单***\n' + costReceipt + '----------------------\n' + '挥泪赠送商品：\n' + savingReceipt +
+            '----------------------\n' + "总计：" + totalCost.toFixed(2) + "(元)\n" + "节省：" + totalSaving.toFixed(2) + "(元)\n" + "**********************";
+  return receipt;
 
 }

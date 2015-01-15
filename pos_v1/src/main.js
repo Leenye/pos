@@ -5,8 +5,11 @@ function printInventory(inputs) {
   var listWithPromotion = getListWithPromotion(list);
   var costAndSavings = getCostAndSavings(listWithPromotion);
   var allCost = getAllCost(costAndSavings);
+  var allSaving = getAllSaving(costAndSavings);
   //console.log(costAndSavings);
   console.log(allCost);
+  console.log(allSaving);
+
 
 }
 
@@ -78,8 +81,6 @@ function getListWithPromotion(list){
 }
 
 function getCostAndSavings (list){
-  var totalCost = 0;
-  var totalSaving = 0;
   for (var i=0; i<list.length; i++ ){
     if(list[i].promotionNum >= 1){
        list[i].cost = list[i].price * (list[i].amount - list[i].promotionNum);
@@ -106,6 +107,14 @@ function getAllCost (list){
   }
   alert(allCost);
   return allCost;
+}
+function getAllSaving (list){
+  var allSaving = 0;
+  for(var i=0; i<list.length; i++ ){
+    allSaving = allSaving + list[i].saving;
+  }
+  alert(allSaving);
+  return allSaving;
 }
 
 function getReceipt(list){

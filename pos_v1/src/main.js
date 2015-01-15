@@ -2,8 +2,11 @@
 function printInventory(inputs) {
   var purchasedItems = getPurchasedItems(inputs);
   var list = getListItem(purchasedItems);
-  var listWithPromotion = getPromotionItems(list);
-  console.log(listWithPromotion);
+  var listWithPromotion = getListWithPromotion(list);
+  var costAndSavings = getCostAndSavings(listWithPromotion);
+  var allCost = getAllCost(costAndSavings);
+  //console.log(costAndSavings);
+  console.log(allCost);
 
 }
 
@@ -33,13 +36,15 @@ function getPurchasedItems(goods){
   return items;
 }
 
-function ListItem(barcode, amount, name, unit, price, promotionNum){
+function ListItem(barcode, amount, name, unit, price, promotionNum, cost, saving){
   this.barcode = barcode;
   this.amount = amount;
   this.name = name;
   this.unit = unit;
   this.price = price;
   this.promotionNum = promotionNum;
+  this.cost = cost||0;
+  this.saving = saving||0;
 }
 
 function getListItem(items){
@@ -47,21 +52,19 @@ function getListItem(items){
   var list = [];
   for(var barcode in items){
     listItem = new ListItem(barcode, items[barcode]);
-    list.push(listItem);
-  }
-  for (var i=0; i<list.length; i++){
     for(var j=0; j<allItems.length; j++){
-      if (list[i].barcode == allItems[j].barcode){
-        list[i].name = allItems[j].name;
-        list[i].price = allItems[j].price;
-        list[i].unit = allItems[j].unit;
+      if (listItem.barcode == allItems[j].barcode){
+        listItem.name = allItems[j].name;
+        listItem.price = allItems[j].price;
+        listItem.unit = allItems[j].unit;
       }
     }
+    list.push(listItem);
   }
   return list;
 }
 
-function getPromotionItems(list){
+function getListWithPromotion(list){
   var promotions = loadPromotions();
   var promotionBarcodes = promotions[0].barcodes;
   for (var i=0; i<promotionBarcodes.length; i++){
@@ -72,4 +75,41 @@ function getPromotionItems(list){
     }
   }
   return list;
+}
+
+function getCostAndSavings (list){
+  var totalCost = 0;
+  var totalSaving = 0;
+  for (var i=0; i<list.length; i++ ){
+    if(list[i].promotionNum >= 1){
+       list[i].cost = list[i].price * (list[i].amount - list[i].promotionNum);
+       list[i].saving = list[i].promotionNum*list[i].price;
+    } else {
+      list[i].cost = list[i].price * list[i].amount;
+    }
+  }
+  // for(var x in list){    //I wanna use 'for in' here.but failed,why?
+  //   if(x.promotionNum >= 1){
+  //     this.cost = this.price * (this.amount - this.promotionNum);
+  //     this.saving = this.price * this.promotionNum;
+  //   } else {
+  //     this.cost = this.price * this.amount;
+  //   }
+  // }
+  return list;
+}
+
+function getAllCost (list){
+  var allCost = 0;
+  for(var i=0; i<list.length; i++ ){
+    allCost = allCost + list[i].cost;
+  }
+  alert(allCost);
+  return allCost;
+}
+
+function getReceipt(list){
+  var receipt = "***<没钱赚商店>购物清单***";
+
+
 }
